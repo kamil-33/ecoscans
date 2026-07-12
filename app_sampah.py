@@ -34,7 +34,7 @@ if foto_user is not None:
     st.image(image, caption="Gambar yang masuk ke sistem", use_container_width=True)
     st.write("🔍 Sedang menganalisis...")
     
-    preprocessor = create_preprocessor('MobilNetV2', target_size=(224, 224))
+    preprocessor = create_preprocessor('MobileNetV2', target_size=(224, 224))
     img_normalized = preprocessor.preprocess_image(image)
     
     indeks_tertinggi = np.random.randint(0, len(labels))
