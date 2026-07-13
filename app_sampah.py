@@ -62,14 +62,19 @@ except FileNotFoundError:
 
 st.markdown("---")
 
-# ==========================================
-# 4. LOAD MODEL & LABELS AI
+# =# ==========================================
+# 4. LOAD MODEL & LABELS AI (VERSI HEMAT RAM)
 # ==========================================
 @st.cache_resource
 def load_my_model():
-    return tf.keras.models.load_model('model_sampah.h5')
+    # Membersihkan memori sisa dari sesi TensorFlow sebelumnya
+    tf.keras.backend.clear_session()
+    # Memuat model dengan kompilasi dimatikan agar hemat RAM setengahnya
+    return tf.keras.models.load_model('model_sampah.h5', compile=False)
 
 model = load_my_model()
+
+
 
 with open('labels.json', 'r') as f:
     labels = json.load(f)
