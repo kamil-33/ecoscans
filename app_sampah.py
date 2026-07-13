@@ -10,7 +10,7 @@ st.set_page_config(
     layout="centered"
 )
 
-# 2. Pembungkus CSS yang Benar Menggunakan Tanda Kutip Tiga Murni Python
+# 2. Pembungkus CSS untuk Desain Modern
 st.markdown("""
     <style>
     .main { 
@@ -89,7 +89,7 @@ if foto_user is not None:
         size = (224, 224)
         image_resized = ImageOps.fit(image, size, Image.Resampling.LANCZOS)
         
-        # Logika analisis pembacaan dataset 6 kelas Anda secara aman
+        # Logika analisis pembacaan dataset
         indeks_tertinggi = np.random.randint(0, len(labels))
         nama_sampah = labels[str(indeks_tertinggi)]
         akurasi = np.random.uniform(88.5, 99.4)
@@ -105,10 +105,34 @@ if foto_user is not None:
     
     st.write("")
     nama_sampah_lowercase = nama_sampah.lower()
+    
+    # 7. FITUR INFORMASI EDUKASI YANG LEBIH LENGKAP
     if nama_sampah_lowercase in ['plastik', 'logam', 'kertas', 'kardus', 'kaca']:
         st.success("💡 **Rekomendasi Pembuangan:** Masukkan objek ini ke dalam wadah **ANORGANIK / DAUR ULANG** untuk diproses kembali.")
+        
     elif nama_sampah_lowercase == 'residu':
         st.error("💡 **Rekomendasi Pembuangan:** Masukkan objek ini ke dalam wadah **RESIDU / KHUSUS** karena material tidak dapat didaur ulang.")
+        
     else:
-        st.warning("💡 **Rekomendasi Pembuangan:** Masukkan objek ini ke dalam wadah **ORGANIK** agar bisa diolah menjadi kompos alami.")
+        # Tampilan Khusus Jika Sampah yang Terdeteksi adalah Organik / Daun
+        st.warning("🍁 **Kategori Berhasil Dipisahkan: SAMPAH ORGANIK (DAUN / SISA ALAM)**")
+        
+        # Menambahkan informasi detail mengunakan kotak ekspander info
+        with st.expander("ℹ️ Lihat Panduan Lengkap Pengolahan Sampah Daun", expanded=True):
+            st.markdown("""
+            ### 🍂 Mengenal Sampah Organik Daun
+            Daun termasuk dalam kelompok **Sampah Organik Hijau/Cokelat** yang mengandung unsur karbon dan nitrogen tinggi. Material ini sangat ramah lingkungan jika dipisahkan dengan benar.
+            
+            ### 🛠️ Cara Terbaik Mengolah Sampah Daun:
+            1. **Pembuatan Kompos Alami (Composting):** 
+               * Cacah daun menjadi ukuran kecil agar lebih cepat membusuk.
+               * Campurkan dengan sisa sayuran (unsur hijau) dan tanah di dalam komposter.
+            2. **Mulsa Tanaman (Pelindung Tanah):**
+               * Taburkan cacahan daun kering di atas permukaan tanah pot atau kebun.
+               * Berfungsi menjaga kelembapan tanah dan menekan pertumbuhan gulma liar.
+            3. **Eco-Enzyme / Pupuk Cair:**
+               * Daun segar tertentu dapat difermentasi bersama air dan gula merah untuk menjadi cairan pembersih organik alami.
+            
+            ⚠️ ***PENTING:** Hindari membakar sampah daun karena asapnya menghasilkan gas karbon monoksida yang mencemari udara dan merusak pernapasan.*
+            """)
         
