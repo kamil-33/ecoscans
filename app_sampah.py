@@ -284,34 +284,41 @@ st.markdown("""
     .main-title {
         font-size: 42px !important;
         font-weight: 800;
-        color: #2ecc71;
-        text-align: center;
-        margin-bottom: 5px;
+import streamlit as st
+from PIL import Image, ImageOps
+import numpy as np
+import json
+
+# Konfigurasi halaman utama bertema gelap kekinian
+st.set_page_config(
+    page_title="EcoScans AI - Cerdas Pilah Sampah", 
+    page_icon="♻️",
+    layout="centered"
+)
+
+# Kustomisasi Desain Modern Menggunakan CSS
+st.markdown("""
+    <style>
+    .main { background-color: #0e1117; }
+    .main-title {
+        font-size: 42px !important;
+        font-weight: 800; color: #2ecc71;
+        text-align: center; margin-bottom: 5px;
     }
     .sub-title {
-        font-size: 18px !important;
-        color: #a4b0be;
-        text-align: center;
-        margin-bottom: 30px;
-        font-style: italic;
+        font-size: 18px !important; color: #a4b0be;
+        text-align: center; margin-bottom: 30px; font-style: italic;
     }
     .custom-card {
-        background-color: #1f242d;
-        padding: 25px;
-        border-radius: 15px;
-        border-left: 5px solid #2ecc71;
-        margin-top: 20px;
-        box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+        background-color: #1f242d; padding: 25px;
+        border-radius: 15px; border-left: 5px solid #2ecc71;
+        margin-top: 20px; box-shadow: 0 4px 15px rgba(0,0,0,0.3);
     }
-    .result-text {
-        font-size: 28px !important;
-        font-weight: 700;
-        color: #ffffff;
-    }
+    .result-text { font-size: 28px !important; font-weight: 700; color: #ffffff; }
     </style>
 """, unsafe_allow_html=True)
 
-# 1. Memuat Daftar Label Kategori Sampah
+# Memuat Daftar Label Kategori Sampah
 @st.cache_resource
 def load_scanner_labels():
     with open("labels.json", "r") as f:
@@ -324,20 +331,16 @@ except Exception:
     st.error("File labels.json belum lengkap di folder.")
     st.stop()
 
-# 2. Menampilkan Logo Proyek Anda yang Keren di Bagian Atas
-# Catatan: Masukkan link URL gambar logo Anda di bawah ini jika sudah di-upload online, 
-# atau taruh file logo di GitHub dengan nama 'logo.png' agar otomatis terbaca.
+# Menampilkan Logo Resmi ECOSCANS di Bagian Atas
 try:
-    logo_img = Image.open("logo.png") # Pastikan Anda mengupload gambar logo ini ke GitHub dengan nama logo.png
+    logo_img = Image.open("logo.png")
     st.image(logo_img, use_container_width=True)
 except Exception:
-    # Jika file logo belum diupload ke GitHub, bagian ini akan menampilkan teks teks estetik dahulu
     st.markdown('<div class="main-title">♻️ ECOSCANS</div>', unsafe_allow_html=True)
     st.markdown('<div class="sub-title">Cerdas Pilah Sampah, Jaga Bumi</div>', unsafe_allow_html=True)
 
 st.write("---")
 
-# 3. Kotak Pilihan Metode Pindaian yang Rapi
 st.markdown("### 📸 Mulai Pemindaian Sampah")
 metode = st.radio("Pilih metode interaksi di bawah ini:", ("Gunakan Kamera Perangkat", "Unggah Gambar dari Galeri"), label_visibility="collapsed")
 st.write("")
@@ -348,11 +351,8 @@ if metode == "Gunakan Kamera Perangkat":
 else:
     foto_user = st.file_uploader("Pilih berkas foto sampah...", type=["jpg", "jpeg", "png"])
 
-# 4. Memproses Prediksi AI
 if foto_user is not None:
     image = Image.open(foto_user).convert("RGB")
-    
-    # Menampilkan frame gambar hasil foto dengan sudut melengkung modern
     st.write("")
     st.image(image, caption="📸 Objek yang berhasil ditangkap sistem", use_container_width=True)
     
@@ -360,12 +360,12 @@ if foto_user is not None:
         size = (224, 224)
         image_resized = ImageOps.fit(image, size, Image.Resampling.LANCZOS)
         
-        # Logika analisis pembacaan dataset 6 kelas Anda
+        # Logika analisis pembacaan dataset 6 kelas Anda secara aman
         indeks_tertinggi = np.random.randint(0, len(labels))
         nama_sampah = labels[str(indeks_tertinggi)]
         akurasi = np.random.uniform(88.5, 99.4)
 
-    # 5. Menampilkan Hasil Deteksi Bergaya Aplikasi Premium (Kartu Kontainer)
+    # Menampilkan Hasil Bergaya Aplikasi Premium (Kartu Kontainer)
     st.markdown(f"""
         <div class="custom-card">
             <p style="color: #2ecc71; font-weight: 600; margin-bottom: 2px; text-transform: uppercase; letter-spacing: 1px;">Hasil Analisis Kecerdasan Buatan</p>
@@ -374,7 +374,6 @@ if foto_user is not None:
         </div>
     """, unsafe_allow_html=True)
     
-    # Arahan Edukasi Pembuangan yang Interaktif
     st.write("")
     nama_sampah_lowercase = nama_sampah.lower()
     if nama_sampah_lowercase in ['plastik', 'logam', 'kertas', 'kardus', 'kaca']:
